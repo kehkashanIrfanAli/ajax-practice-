@@ -6,20 +6,33 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="demo">Click me to change</div>
-    <button onclick="loadtext()">Click me</button>
-
+  
+    <div id="main"></div>
     <script>
-        function loadtext() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("demo").innerHTML = this.responseText;
-                }
-            };
-            xhttp.open('GET', 'readme.text', true); 
-            xhttp.send();
-        };
+        let http = new XMLHttpRequest
+        http.open("GET","data.xml",true)
+        http.send()
+        http.onload = function(){
+            if(this.readyState== 4 && this.status== 200){
+                let xml = this.responseXML;
+                let products = xml.getElementsByTagName("product");
+                let output = "";
+                for(let i=0; i < products.length; i++){
+                    let img = products[i].getElementsByTagName("img")[0].textContent;
+                    let title = products[i].getElementsByTagName("title")[0].textContent;
+                    let price = products[i].getElementsByTagName("price")[0].textContent;
+                    output += ` <div id="card">
+        <img src="${img}" alt="">
+        <div id="title">${title}</div>
+        <div id="price">${price} <span>&euro;</span></div>
+        <button>add to cart</button>
+    </div>`;
+
+                };
+                document.getElementById("main").innerHTML = output;
+            }
+        }
+
     </script>
 </body>
 </html>
